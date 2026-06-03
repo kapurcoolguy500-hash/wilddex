@@ -1,0 +1,26 @@
+{
+  "name": "real-life-pokedex",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently -k -n server,client -c green,cyan \"npm:server\" \"npm:client\"",
+    "server": "node server/index.js",
+    "client": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.65.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "idb": "^8.0.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "concurrently": "^9.1.2",
+    "vite": "^6.0.7"
+  }
+}
