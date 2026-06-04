@@ -293,6 +293,34 @@ body {
   cursor: pointer;
   backdrop-filter: blur(6px);
 }
+/* Upload pill in the top-right corner of the closed device. */
+.pokedex__upload {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  background: rgba(0, 0, 0, 0.28);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+.pokedex__upload:active {
+  transform: scale(0.95);
+}
+.pokedex__upload:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
 .pokedex__camhint {
   position: absolute;
   bottom: 120px;

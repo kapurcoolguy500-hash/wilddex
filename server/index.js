@@ -1,6 +1,6 @@
 import 'dotenv/config'
 import express from 'express'
-import { identify, isMockMode } from './identify.js'
+import { identifyFromImageField, isMockMode } from './identify.js'
 
 const app = express()
 // Photos arrive as base64 data URLs; allow a generous body size.
@@ -11,23 +11,14 @@ app.get('/api/health', (_req, res) => {
 })
 
 // Core endpoint: receive an image, return a structured IdentifiedEntry.
-app.post('/identify', async (req, res) => {
+// Mirrors the Vercel serverless function in api/identify.js (shared logic).
+app.post('/api/identify', async (req, res) => {
   try {
     const { image, mediaType } = req.body || {}
     if (!image || typeof image !== 'string') {
       return res.status(400).json({ error: 'Missing image data.' })
     }
-
-    // Accept either a raw base64 string or a full data URL.
-    let base64 = image
-    let type = mediaType || 'image/jpeg'
-    const dataUrl = image.match(/^data:(image\/[a-zA-Z+]+);base64,(.*)$/)
-    if (dataUrl) {
-      type = dataUrl[1]
-      base64 = dataUrl[2]
-    }
-
-    const entry = await identify(base64, type)
+    const entry = await identifyFromImageField(image, mediaType)
     res.json({ entry })
   } catch (err) {
     console.error('[identify] failed:', err)

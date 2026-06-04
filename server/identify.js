@@ -111,3 +111,17 @@ export async function identify(imageBase64, mediaType) {
   }
   return identifyWithClaude(imageBase64, mediaType)
 }
+
+// Accepts the raw `image` field from a request (a base64 data URL or bare
+// base64), normalizes it, and runs identification. Shared by the dev Express
+// server and the Vercel serverless function so the logic lives in one place.
+export async function identifyFromImageField(image, mediaType) {
+  let base64 = image
+  let type = mediaType || 'image/jpeg'
+  const dataUrl = String(image).match(/^data:(image\/[a-zA-Z+]+);base64,(.*)$/)
+  if (dataUrl) {
+    type = dataUrl[1]
+    base64 = dataUrl[2]
+  }
+  return identify(base64, type)
+}

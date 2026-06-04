@@ -2,7 +2,7 @@
 // this call and the entry shape it returns — never anything about Claude.
 
 export async function identifyImage(dataUrl) {
-  const res = await fetch('/identify', {
+  const res = await fetch('/api/identify', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ image: dataUrl }),

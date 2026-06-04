@@ -9,6 +9,7 @@ import { resumeAudio, playClick } from '../lib/sound.js'
 
 export default function CaptureScreen({ onPick, status, error, onRetry, lastFile }) {
   const inputRef = useRef(null)
+  const uploadRef = useRef(null)
   const videoRef = useRef(null)
   const streamRef = useRef(null)
   const [mode, setMode] = useState('closed') // 'closed' | 'opening' | 'camera'
@@ -121,6 +122,18 @@ export default function CaptureScreen({ onPick, status, error, onRetry, lastFile
         </button>
       )}
 
+      {/* Upload an existing photo instead of using the camera. */}
+      {mode === 'closed' && (
+        <button
+          className="pokedex__upload"
+          onClick={() => uploadRef.current?.click()}
+          disabled={status === 'identifying'}
+          aria-label="Upload a photo from your device"
+        >
+          ⬆ Upload
+        </button>
+      )}
+
       {/* Top half of the shell */}
       <div className="pokedex__half pokedex__half--top">
         <span className="pokedex__light" aria-hidden="true" />
@@ -155,6 +168,7 @@ export default function CaptureScreen({ onPick, status, error, onRetry, lastFile
         </div>
       )}
 
+      {/* Camera-fallback input (opens the device camera). */}
       <input
         ref={inputRef}
         type="file"
@@ -163,6 +177,8 @@ export default function CaptureScreen({ onPick, status, error, onRetry, lastFile
         onChange={handleChange}
         hidden
       />
+      {/* Upload input — no `capture`, so it offers the photo library/files. */}
+      <input ref={uploadRef} type="file" accept="image/*" onChange={handleChange} hidden />
     </div>
   )
 }
