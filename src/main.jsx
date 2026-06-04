@@ -9,11 +9,12 @@ createRoot(document.getElementById('root')).render(
   </React.StrictMode>,
 )
 
-// Register the service worker for installable / offline-shell PWA behavior.
+// We no longer use a service worker (an old one cached stale builds and blanked
+// the screen after deploys). Proactively unregister any leftover registration so
+// existing visitors heal; sw.js itself also self-destructs on activation.
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(() => {
-      /* non-fatal: app still works without the SW */
-    })
-  })
+  navigator.serviceWorker
+    .getRegistrations?.()
+    .then((regs) => regs.forEach((r) => r.unregister()))
+    .catch(() => {})
 }

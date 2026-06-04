@@ -1,27 +1,25 @@
-// Minimal app-shell service worker. Caches static assets so the app launches
-// instantly and survives a flaky connection. Identification always needs the
-// network (it hits /identify), so those requests are never cached.
+// Self-destructing service worker.
+//
+// An earlier version cached the app shell for offline use, but that caused the
+// site to show a blank screen after redeploys: it kept serving a stale index.html
+// that referenced old, now-missing hashed asset files. WildDex needs the network
+// anyway (identification is an API call), so we no longer use a service worker.
+//
+// This version takes over from the old one, deletes all caches, unregisters
+// itself, and reloads open tabs so the app always loads fresh from the network.
 
-const CACHE = 'wilddex-shell-v1'
-const SHELL = ['/', '/index.html', '/icon.svg', '/manifest.webmanifest']
+self.addEventListener('install', () => self.skipWaiting())
 
-self.addEventListener('install', (e) => {
-  e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)))
-  self.skipWaiting()
-})
-
-self.addEventListener('activate', (e) => {
-  e.waitUntil(
-    caches.keys().then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k)))),
-  )
-  self.clients.claim()
-})
-
-self.addEventListener('fetch', (e) => {
-  const { request } = e
-  // Never cache API calls.
-  if (request.method !== 'GET' || new URL(request.url).pathname.startsWith('/identify')) return
-  e.respondWith(
-    caches.match(request).then((cached) => cached || fetch(request).catch(() => caches.match('/'))),
+self.addEventListener('activate', (event) => {
+  event.waitUntil(
+    (async () => {
+      const keys = await caches.keys()
+      await Promise.all(keys.map((k) => caches.delete(k)))
+      await self.registration.unregister()
+      const clients = await self.clients.matchAll({ type: 'window' })
+      for (const client of clients) client.navigate(client.url)
+    })(),
   )
 })
+
+// No fetch handler — every request goes straight to the network.
