@@ -99,29 +99,6 @@ body {
   isolation: isolate;
 }
 
-/* Camera layer sits behind the shell and is revealed when it splits open. */
-.pokedex__camera {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background: #0a0d12;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.pokedex__video {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-.pokedex__camera-loading {
-  color: var(--text-dim);
-  font-weight: 700;
-  letter-spacing: 1px;
-}
-
 /* The two halves of the red shell. */
 .pokedex__half {
   position: absolute;
@@ -158,13 +135,6 @@ body {
 .pokedex__half--bottom::before {
   top: 0;
 }
-.is-open .pokedex__half--top {
-  transform: translateY(-101%);
-}
-.is-open .pokedex__half--bottom {
-  transform: translateY(101%);
-}
-
 /* Blue corner light. */
 .pokedex__light {
   position: absolute;
@@ -241,59 +211,7 @@ body {
   filter: grayscale(0.4) brightness(0.85);
   cursor: default;
 }
-.is-open .pokedex__lens {
-  opacity: 0;
-  transform: translate(-50%, -50%) scale(0.6);
-  pointer-events: none;
-}
-
-/* Camera-mode controls (live in the camera layer, visible once open). */
-.pokedex__viewfinder span {
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  border: 3px solid rgba(255, 255, 255, 0.8);
-}
-.pokedex__viewfinder span:nth-child(1) {
-  top: 18px;
-  left: 18px;
-  border-right: none;
-  border-bottom: none;
-}
-.pokedex__viewfinder span:nth-child(2) {
-  top: 18px;
-  right: 18px;
-  border-left: none;
-  border-bottom: none;
-}
-.pokedex__viewfinder span:nth-child(3) {
-  bottom: 18px;
-  left: 18px;
-  border-right: none;
-  border-top: none;
-}
-.pokedex__viewfinder span:nth-child(4) {
-  bottom: 18px;
-  right: 18px;
-  border-left: none;
-  border-top: none;
-}
-.pokedex__close {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  z-index: 7;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(0, 0, 0, 0.5);
-  color: #fff;
-  font-size: 20px;
-  cursor: pointer;
-  backdrop-filter: blur(6px);
-}
-/* Upload pill in the top-right corner of the closed device. */
+/* Upload pill in the top-right corner of the device. */
 .pokedex__upload {
   position: absolute;
   top: 16px;
@@ -320,41 +238,6 @@ body {
 .pokedex__upload:disabled {
   opacity: 0.5;
   cursor: default;
-}
-.pokedex__camhint {
-  position: absolute;
-  bottom: 120px;
-  left: 0;
-  right: 0;
-  z-index: 7;
-  text-align: center;
-  color: #fff;
-  font-weight: 700;
-  font-size: 13px;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-}
-.pokedex__capture {
-  position: absolute;
-  bottom: 28px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 7;
-  width: 80px;
-  height: 80px;
-  border-radius: 50%;
-  border: 5px solid #fff;
-  background: radial-gradient(circle at 50% 42%, #ff6a5a, #e23b29 70%);
-  cursor: pointer;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
-}
-.pokedex__capture-ring {
-  position: absolute;
-  inset: 8px;
-  border-radius: 50%;
-  border: 3px solid rgba(255, 255, 255, 0.6);
-}
-.pokedex__capture:active {
-  transform: translateX(-50%) scale(0.94);
 }
 .pokedex__error {
   position: absolute;
