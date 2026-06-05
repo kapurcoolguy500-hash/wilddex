@@ -12,6 +12,8 @@ let muted = localStorage.getItem(MUTE_KEY) === '1'
 let scanTimer = null
 
 function getCtx() {
+  // A closed context can't be revived — drop it so a fresh one is created.
+  if (ctx && ctx.state === 'closed') ctx = null
   if (!ctx) {
     const AC = window.AudioContext || window.webkitAudioContext
     if (!AC) return null
@@ -22,7 +24,18 @@ function getCtx() {
 
 export function resumeAudio() {
   const c = getCtx()
-  if (c && c.state === 'suspended') c.resume()
+  // Resume on ANY non-running state. iOS uses a non-standard "interrupted"
+  // state (e.g. after the native camera opens), not just "suspended", so a
+  // strict === 'suspended' check would never recover and sounds go silent.
+  if (c && c.state !== 'running') c.resume().catch(() => {})
+}
+
+// When the page returns to the foreground (e.g. after closing the native
+// camera), proactively resume so the post-capture scan/success sounds play.
+if (typeof document !== 'undefined') {
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) resumeAudio()
+  })
 }
 
 export function isMuted() {
