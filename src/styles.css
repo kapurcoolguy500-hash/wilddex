@@ -729,6 +729,40 @@ body {
   color: var(--pdx-ink);
 }
 
+/* Share button inside the Pokédex bio panel. */
+.pdx__share {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: calc(100% - 28px);
+  margin: 16px 14px 16px;
+  padding: 13px 18px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #f24a32, var(--pdx-red) 60%, var(--pdx-red-d));
+  color: #fff;
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  cursor: pointer;
+  box-shadow: 0 6px 16px -6px rgba(227, 53, 13, 0.8);
+}
+.pdx__share:active {
+  transform: scale(0.98);
+}
+.pdx__share:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+.pdx__sharemsg {
+  margin: -6px 14px 16px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #2e7d46;
+}
+
 /* Reveal animation reused on the panel. */
 .reveal {
   animation: cardReveal 0.42s cubic-bezier(0.2, 0.8, 0.3, 1) both;

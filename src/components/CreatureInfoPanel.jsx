@@ -1,5 +1,6 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { categoryMeta, rarityMeta } from '../lib/meta.js'
+import { shareCreature } from '../lib/sharecard.js'
 import BioSections from './BioSections.jsx'
 
 // The creature info, styled after the classic Pokédex INFO screen:
@@ -11,6 +12,18 @@ export default function CreatureInfoPanel({ entry, photo, label = 'INFO', isNew 
   const cat = categoryMeta(entry.category)
   const rar = rarityMeta(entry.rarity)
   const classLabel = entry.classification || `${cat.label} Creature`
+
+  const [sharing, setSharing] = useState(false)
+  const [shareMsg, setShareMsg] = useState('')
+
+  const handleShare = async () => {
+    if (sharing) return
+    setSharing(true)
+    setShareMsg('')
+    const res = await shareCreature(entry, photo)
+    if (res?.fallback) setShareMsg('Card saved & caption copied')
+    setSharing(false)
+  }
 
   return (
     <div className="pdx">
@@ -57,6 +70,11 @@ export default function CreatureInfoPanel({ entry, photo, label = 'INFO', isNew 
       {entry.dexEntry && <div className="pdx__desc">{entry.dexEntry}</div>}
 
       <BioSections entry={entry} />
+
+      <button className="pdx__share" onClick={handleShare} disabled={sharing}>
+        <span aria-hidden="true">⤴</span> {sharing ? 'Sharing…' : 'Share this find'}
+      </button>
+      {shareMsg && <p className="pdx__sharemsg">{shareMsg}</p>}
     </div>
   )
 }
